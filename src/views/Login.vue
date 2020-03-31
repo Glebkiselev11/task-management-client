@@ -44,6 +44,11 @@ export default {
     username: '',
     password: '',
     errorMessage: null,
+    axiosConfig: {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }
+    }
   }),
   methods: {
     async submit() {
@@ -55,13 +60,12 @@ export default {
         const { data: { accessToken } } = await axios.post(
           '/auth/signin', 
           params, 
-          {
-            headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        });
+          this.axiosConfig
+        );
 
         localStorage.setItem('accessToken', accessToken);
+        this.$router.push('/');
+
       } catch (error) {
         if (error.response) {
           this.errorMessage = error.response.data.message[0]

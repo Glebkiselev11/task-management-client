@@ -1,8 +1,11 @@
 <template>
   <div class="home container">
 
+    <h2 v-if="!tasks">No tasks yet.</h2>
+    
     <!-- Елемент таски -->
     <Task 
+      v-else
       v-for="(task, index) of tasks"
       :key="index"
       :title="task.title"
@@ -13,7 +16,8 @@
 </template>
 
 <script>
-import Task from '@/components/Task'
+import Task from '@/components/Task';
+import axios from 'axios';
 
 export default {
   name: 'Home',
@@ -21,17 +25,25 @@ export default {
     Task,
   },
   data: () => ({
-    tasks: [
-      {
-        title: 'first task',
-        description: 'lorem lorem',
+    tasks: null,
+
+    config: {
+      headers: { 
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}` 
       },
-      {
-        title: 'second task',
-        description: 'lorem2 lorem2',
-      }
-    ]
+    },
   }),
+
+  async mounted() {
+    try {
+      const { data } = await axios.get('/tasks/', this.config);
+      this.tasks = data;
+    } catch (error) {
+      // В любой непонятной ситуации редирект на страницу входа
+      this.$router.push('login');
+    }
+    
+  }
 
 };
 </script>
