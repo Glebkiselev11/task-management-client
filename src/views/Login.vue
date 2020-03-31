@@ -1,6 +1,6 @@
 <template>
-  <form class="form-signin">
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+  <form class="form-signin form-sign" @submit.prevent="submit()">
+    <h1>Please sign in</h1>
 
     <div class="input-wrap">
       <label for="inputUsername">Username</label>
@@ -8,7 +8,8 @@
         v-model="username" 
         type="text" 
         id="inputUsername" 
-        placeholder="Username" 
+        placeholder="Username"
+        required
       />
     </div>
 
@@ -18,7 +19,8 @@
         v-model="password" 
         type="password" 
         id="inputPassword" 
-        placeholder="Password" 
+        placeholder="Password"
+        required 
       />
     </div>
 
@@ -28,8 +30,7 @@
       key="error"
     >{{errorMessage}}</ErrorMessage>
 
-    <button 
-      @click.prevent="submit()" 
+    <button  
       type="submit"
     >Sign in</button>
   </form>
@@ -77,16 +78,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.form-signin {
-  width: 25%;
-  margin: auto;
-}
-
-.input-wrap {
-  display: flex;
-  flex-direction: column;
-  height: 50px;
-}
-</style>
