@@ -1,7 +1,15 @@
 <template>
   <div class="home container">
 
-    <h2 v-if="!tasks">No tasks yet.</h2>
+    <!-- Поиск, фильтр -->
+    <div class="tools-bar">
+      <form class="search" @submit.prevent="searchFilter()">
+        <input type="text" v-model="config.params.search">
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
+    <h2 v-if="!tasks.length">Nothing found</h2>
     
     <!-- Елемент таски -->
     <Task 
@@ -10,6 +18,9 @@
       :key="index"
       :title="task.title"
       :description="task.description"
+      :id="task.id"
+      :status="task.status"
+      @getTask="getTasks()"
     />
   </div>
   
@@ -25,26 +36,46 @@ export default {
     Task,
   },
   data: () => ({
-    tasks: null,
+    tasks: [],
 
     config: {
       headers: { 
         Authorization: `Bearer ${localStorage.getItem('accessToken')}` 
       },
+      params: {
+        // Поиск по задачам
+        search: null,
+      },
     },
   }),
 
   async mounted() {
-    try {
-      const { data } = await axios.get('/tasks/', this.config);
-      this.tasks = data;
-    } catch (error) {
-      // В любой непонятной ситуации редирект на страницу входа
-      this.$router.push('login');
-    }
-    
-  }
+    await this.getTasks();
+  },
 
+  methods: {
+    async searchFilter() {
+      await this.getTasks();
+    },
+
+    async getTasks() {
+      if (this.config.params.search === '') {
+        this.config.params.search = null;
+      }
+
+      try {
+        const { data } = await axios.get('/tasks/', this.config);
+        this.tasks = data;
+      } catch (error) {
+        if (error.response) {
+          // Если токен не действителен, или не найден, то редиректим на авторизацию
+          if (error.response.status === 401) {
+            this.$router.push('login');
+          }
+        }
+      }
+    },
+  }
 };
 </script>
 
@@ -53,5 +84,10 @@ export default {
     width: 700px;
     display: flex;
     flex-direction: column;
+  }
+
+  .tools-bar {
+    padding: 5px;
+    border-bottom: 1px solid grey;
   }
 </style>
