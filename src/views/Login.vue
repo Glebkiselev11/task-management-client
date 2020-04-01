@@ -38,6 +38,7 @@
 
 <script>
 import axios from 'axios';
+import {mapActions} from 'vuex';
 
 export default {
   name: 'Login',
@@ -45,34 +46,20 @@ export default {
     username: '',
     password: '',
     errorMessage: null,
-    axiosConfig: {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      }
-    }
   }),
   methods: {
+    ...mapActions(['signIn']),
+
     async submit() {
       const params = new URLSearchParams();
       params.append('username', this.username);
       params.append('password', this.password);
 
       try {
-        const { data: { accessToken } } = await axios.post(
-          '/auth/signin', 
-          params, 
-          this.axiosConfig
-        );
-
-        localStorage.setItem('accessToken', accessToken);
+        await this.signIn(params);
         this.$router.push('/');
-
       } catch (error) {
-        if (error.response) {
-          this.errorMessage = error.response.data.message[0]
-            ? error.response.data.message[0]
-            : error.response.data.message;
-        }
+        this.errorMessage = error.message;
       }
     },
   },
