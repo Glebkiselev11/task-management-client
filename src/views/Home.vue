@@ -4,7 +4,7 @@
     <!-- Поиск, фильтр -->
     <div class="tools-bar">
       <form class="search" @submit.prevent="searchFilter()">
-        <input type="text" v-model="config.params.search">
+        <input type="text" v-model="params.search">
         <button type="submit">Search</button>
       </form>
     </div>
@@ -28,7 +28,7 @@
 
 <script>
 import Task from '@/components/Task';
-import axios from 'axios';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Home',
@@ -36,45 +36,38 @@ export default {
     Task,
   },
   data: () => ({
-    tasks: [],
-
-    config: {
-      headers: { 
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}` 
-      },
-      params: {
-        // Поиск по задачам
-        search: null,
-      },
+    params: {
+      // Поиск по задачам
+      search: null,
     },
   }),
 
+  computed: {
+    ...mapGetters(['tasks']),
+  },
+
   async mounted() {
-    await this.getTasks();
+    try {
+      await this.getTasks(this.params);
+    } catch (error) {
+      // Если токен не действителен, или не найден, то редиректим на авторизацию
+      if (error.statusCode === 401) {
+        this.$router.push('login');
+      }
+    }
   },
 
   methods: {
+    ...mapActions(['getTasks']),
+
     async searchFilter() {
-      await this.getTasks();
-    },
-
-    async getTasks() {
-      if (this.config.params.search === '') {
-        this.config.params.search = null;
+      if (this.params.search === '') {
+        this.params.search = null;
       }
 
-      try {
-        const { data } = await axios.get('/tasks/', this.config);
-        this.tasks = data;
-      } catch (error) {
-        if (error.response) {
-          // Если токен не действителен, или не найден, то редиректим на авторизацию
-          if (error.response.status === 401) {
-            this.$router.push('login');
-          }
-        }
-      }
+      await this.getTasks(this.params);
     },
+
   }
 };
 </script>

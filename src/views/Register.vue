@@ -85,7 +85,7 @@ export default {
       try {
         this.statusText = await this.signUp(params);
       } catch (error) {
-        this.errorMessage = error;
+        this.errorMessage = error.message;
       }
     },
   }

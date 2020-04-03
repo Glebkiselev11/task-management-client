@@ -1,15 +1,19 @@
 import axios from 'axios';
+import errorHelper from './errorHelper';
 
 export default {
   state: {
-    axiosConfig: { headers: {'Content-Type': 'application/x-www-form-urlencoded'} },
+    axiosConfig: { 
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    },
+    axiosConfigWithToken: { 
+      headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
+    }
   },
 
   getters: {
     axiosConfig: s => s.axiosConfig,
-    accessToken() {
-      localStorage.getItem('accessToken');
-    },
+    axiosConfigWithToken: s => s.axiosConfigWithToken,
   },
 
   mutations: {
@@ -30,7 +34,7 @@ export default {
         // Устанавливаем полученный токен в локалстор
         commit('setAccessToken', accessToken);
       } catch (error) {
-        throw new Error(error);
+        throw errorHelper(error);
       }
     },
     
@@ -43,7 +47,7 @@ export default {
           getters.axiosConfig
         );
       } catch (error) {
-        throw new Error(error);
+        throw errorHelper(error);
       }
     },
   },
