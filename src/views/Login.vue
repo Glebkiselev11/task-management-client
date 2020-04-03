@@ -6,7 +6,7 @@
       <label for="inputUsername">Username</label>
       <input 
         v-model="username" 
-        type="text" 
+        type="text"
         id="inputUsername" 
         placeholder="Username"
         required
@@ -29,16 +29,21 @@
       v-if="errorMessage" 
       key="error"
     >{{errorMessage}}</ErrorMessage>
+    
+    <span>Not register yet? <router-link to="/register">Do it!</router-link></span>
+    
+    <br>
 
     <button  
       type="submit"
     >Sign in</button>
+    
+    
   </form>
 </template>
 
 <script>
-import axios from 'axios';
-import {mapActions} from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Login',
@@ -59,7 +64,8 @@ export default {
         await this.signIn(params);
         this.$router.push('/');
       } catch (error) {
-        this.errorMessage = error.message;
+        console.log(error.response);
+        this.errorMessage = error.message
       }
     },
   },

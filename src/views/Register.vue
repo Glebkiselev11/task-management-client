@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Register',
@@ -65,18 +65,15 @@ export default {
     passwordRepeat: '',
     errorMessage: null,
     statusText: null, // Ответ с сервера (если не пришло ошибки)
-    axiosConfig: {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      }
-    }
   }),
 
   methods: {
+    ...mapActions(['signUp']),
+
     async submit() {
       if (this.password !== this.passwordRepeat) {
         this.errorMessage = 'Passwords not equals';
-        return
+        return;
       }
 
       this.errorMessage = null;
@@ -86,12 +83,9 @@ export default {
       params.append('password', this.password);
 
       try {
-        const { statusText } = await axios.post('/auth/signup',  params, this.axiosConfig);
-        this.statusText = statusText;
+        this.statusText = await this.signUp(params);
       } catch (error) {
-        if (error.response) {
-          this.errorMessage = error.response.data.message;
-        }
+        this.errorMessage = error;
       }
     },
   }
