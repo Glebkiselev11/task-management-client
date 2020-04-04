@@ -13,45 +13,45 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapActions } from 'vuex';
+import erorStatusHandlerMixin from '@/mixins/errorStatusHandler.mixin.js';
 
 export default {
   name: 'Task',
+  mixins: [erorStatusHandlerMixin], // В нем метод для обработки статусов ошибки
   props: {
     title: {
       type: String,
-      default: 'Title',
     },
     description: {
       type: String,
-      default: 'Description',
     },
     id: {
       type: Number,
+      required: true
     },
     status: {
       type: String,
     },
   },
 
-  data: () => ({
-
-    config: {
-      headers: { 
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}` 
-      }
-    },
-  }),
-
   methods: {
+    ...mapActions(['deleteTaskById', 'getTasks']),
+
     async deleteTask() {
       try {
-        await axios.delete(`/tasks/${this.id}`, this.config);
-        this.$emit('getTask'); // После удаления запрашиваем по новой список задач
+        await this.deleteTaskById(this.id);
       } catch (error) {
-        cosole.log(error)
+        this.errorStatusHandler(error.statusCode);
       }
-    }
+
+      // После запрашиваем обновленный список задач
+      try {
+        await this.getTasks();
+      } catch (error) {
+        this.errorStatusHandler(error.statusCode);
+      }
+    },
   }
 }
 </script>
@@ -67,7 +67,6 @@ export default {
   .title {
     margin-bottom: 10px;
   }
-
 
   .tools {
     display: flex;

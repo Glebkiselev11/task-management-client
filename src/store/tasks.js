@@ -17,8 +17,7 @@ export default {
   },
 
   actions: {
-
-    async getTasks({commit, getters}, params) {
+    async getTasks({commit, getters}, params = { search: null}) {
       const config = getters.axiosConfigWithToken;
       
       // Подмешиваем параметры, там поисковой запрос
@@ -28,6 +27,17 @@ export default {
         const { data } = await axios.get('/tasks/', config);
         commit('setTasks', data);
       } catch (error) {
+        throw errorHelper(error);
+      }
+    },
+
+    async deleteTaskById({getters}, id) {
+      const config = getters.axiosConfigWithToken;
+
+      try {
+        await axios.delete(`/tasks/${id}`, config);
+      } catch (error) {
+        console.log(error)
         throw errorHelper(error);
       }
     }

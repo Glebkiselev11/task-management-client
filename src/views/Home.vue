@@ -20,7 +20,6 @@
       :description="task.description"
       :id="task.id"
       :status="task.status"
-      @getTask="getTasks()"
     />
   </div>
   
