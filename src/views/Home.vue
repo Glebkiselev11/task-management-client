@@ -1,8 +1,7 @@
 <template>
   <div class="home container">
 
-    <!-- Пока используется, для добавления задачи -->
-    <ControlPanel />
+    <AddTask />
 
     <!-- Поиск, фильтр -->
     <div class="tools-bar">
@@ -31,13 +30,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import erorStatusHandlerMixin from '@/mixins/errorStatusHandler.mixin.js';
-import ControlPanel from '@/components/ControlPanel';
+import AddTask from '@/components/AddTask';
 import Task from '@/components/Task';
 
 export default {
   name: 'Home',
   components: {
-    ControlPanel,
+    AddTask,
     Task,
   },
 

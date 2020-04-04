@@ -1,15 +1,16 @@
 <template>
   <!-- Панель для создания задачи -->
-  <div class="control-panel-wrap">
-    <h2>Create new task</h2>
+  <div class="addtask-panel-wrap">
+    
     <button 
       @click="isShowForm = !isShowForm"
-    >{{ isShowForm ? 'Hide add panel' : 'Show add panel' }}</button>
+    >{{ isShowForm ? '- Hide add panel' : '+ Show add panel' }}</button>
 
     <form 
       v-show="isShowForm"
       @submit.prevent="addNewTask"
     >
+      <h2>Create new task</h2>
       
       <div class="input">
         <label for="title-task">Title</label>
@@ -52,7 +53,7 @@ import { mapActions } from 'vuex';
 import erorStatusHandlerMixin from '@/mixins/errorStatusHandler.mixin.js';
 
 export default {
-  name: 'ControlPanel',
+  name: 'AddTask',
   mixins: [erorStatusHandlerMixin], // В нем метод для обработки статусов ошибки
 
   data: () => ({
@@ -88,7 +89,7 @@ export default {
 
 <style scoped>
 
-.control-panel-wrap {
+.addtask-panel-wrap {
   width: 100%;
   margin: 6px;
   display: flex;
