@@ -61,7 +61,7 @@ export default {
     margin: 6px;
     padding: 6px;
     background: white;
-    box-shadow: 4px 4px 6px 0px rgba(0,0,0,0.7);
+    box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.7);
   }
 
   .title {
@@ -81,6 +81,6 @@ export default {
     cursor: pointer;
   }
   .delete-btn:hover {
-    box-shadow: 4px 4px 6px 0px rgba(0,0,0,0.2);
+    box-shadow: 1px 1px 1px 0px rgba(0,0,0,0.2);
   }
 </style>

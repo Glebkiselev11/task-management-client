@@ -3,8 +3,10 @@ export default {
     // Общее поведение для работы с ошибками
     errorStatusHandler(code) {
       switch (code) {
-        default:
+        case 401:
           this.$router.push('login');
+          break;
+        default:
           break;
       };
 

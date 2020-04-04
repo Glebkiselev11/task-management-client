@@ -1,5 +1,7 @@
 <template>
   <div class="home container">
+    
+    <Navigation />
 
     <AddTask />
 
@@ -32,12 +34,14 @@ import { mapGetters, mapActions } from 'vuex';
 import erorStatusHandlerMixin from '@/mixins/errorStatusHandler.mixin.js';
 import AddTask from '@/components/AddTask';
 import Task from '@/components/Task';
+import Navigation from '@/components/Navigation';
 
 export default {
   name: 'Home',
   components: {
     AddTask,
     Task,
+    Navigation
   },
 
   mixins: [erorStatusHandlerMixin], // В нем метод для обработки статусов ошибки
