@@ -45,6 +45,16 @@ export default {
       }
     },
 
+    async updateStatusTask({getters}, {params, id}) {
+      const config = getters.axiosConfigWithToken;
+      
+      try {
+        await axios.patch(`/tasks/${id}/status`, params, config);
+      } catch (error) {
+        throw errorHelper(error);
+      }
+    },
+
     async deleteTaskById({getters}, id) {
       const config = getters.axiosConfigWithToken;
 

@@ -20,9 +20,9 @@
       v-else
       v-for="(task, index) of tasks"
       :key="index"
+      :id="task.id"
       :title="task.title"
       :description="task.description"
-      :id="task.id"
       :status="task.status"
     />
   </div>

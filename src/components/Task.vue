@@ -4,6 +4,15 @@
     <p class="description">{{description}}</p>
 
     <div class="tools">
+      <select 
+        v-model="changeStatus" 
+        @input="select"
+      >
+        <option value="OPEN">OPEN</option>
+        <option value="DONE">DONE</option>
+        <option value="IN_PROGRESS">IN_PROGRESS</option>
+      </select>
+
       <button 
         @click="deleteTask"
         class="delete-btn" 
@@ -34,9 +43,26 @@ export default {
       type: String,
     },
   },
+  
+  data: () => ({
+    changeStatus: null,
+  }),
+
+  created() {
+    // Записываем статус в локальную переменную, чтобы можно было ее менять без ошибок
+    setTimeout(() => {
+      this.changeStatus = this.status
+    }, 0)
+    
+  },
+
 
   methods: {
-    ...mapActions(['deleteTaskById', 'getTasks']),
+    ...mapActions([
+      'deleteTaskById', 
+      'getTasks', 
+      'updateStatusTask',
+    ]),
 
     async deleteTask() {
       try {
@@ -52,6 +78,24 @@ export default {
         this.errorStatusHandler(error.statusCode);
       }
     },
+
+    // Тригер, который срабатывает на выбор статуса
+    select() {
+      const params = new URLSearchParams();
+      
+      setTimeout(() => {
+        params.append('status', this.changeStatus);
+        this.changeStatusForTask(params);
+      }, 10);
+    },
+
+    // Изменяем статус задачи
+    async changeStatusForTask(params) {
+      await this.updateStatusTask({
+        params,
+        id: this.id
+      });
+    }
   }
 }
 </script>
@@ -70,7 +114,7 @@ export default {
 
   .tools {
     display: flex;
-
+    justify-content: space-between;
   }
 
   .delete-btn {
