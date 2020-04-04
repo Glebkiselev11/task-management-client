@@ -1,6 +1,9 @@
 <template>
   <div class="home container">
 
+    <!-- Пока используется, для добавления задачи -->
+    <ControlPanel />
+
     <!-- Поиск, фильтр -->
     <div class="tools-bar">
       <form class="search" @submit.prevent="searchFilter()">
@@ -27,12 +30,14 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import Task from '@/components/Task';
 import erorStatusHandlerMixin from '@/mixins/errorStatusHandler.mixin.js';
+import ControlPanel from '@/components/ControlPanel';
+import Task from '@/components/Task';
 
 export default {
   name: 'Home',
   components: {
+    ControlPanel,
     Task,
   },
 
@@ -83,6 +88,5 @@ export default {
 
   .tools-bar {
     padding: 5px;
-    border-bottom: 1px solid grey;
   }
 </style>

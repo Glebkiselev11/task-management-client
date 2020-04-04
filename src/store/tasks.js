@@ -13,6 +13,9 @@ export default {
   mutations: {
     setTasks(state, tasks) {
       state.tasks = tasks;
+    },
+    setOneTask(state, task) {
+      state.tasks.push(task);
     }
   },
 
@@ -31,13 +34,23 @@ export default {
       }
     },
 
+    async createNewTask({getters, commit}, params) {
+      const config = getters.axiosConfigWithToken;
+
+      try {
+        const { data } = await axios.post('/tasks/', params, config);
+        commit('setOneTask', data);
+      } catch (error) {
+        throw errorHelper(error);
+      }
+    },
+
     async deleteTaskById({getters}, id) {
       const config = getters.axiosConfigWithToken;
 
       try {
         await axios.delete(`/tasks/${id}`, config);
       } catch (error) {
-        console.log(error)
         throw errorHelper(error);
       }
     }
