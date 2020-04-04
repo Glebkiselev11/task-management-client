@@ -2,18 +2,21 @@ import axios from 'axios';
 import errorHelper from './errorHelper';
 
 export default {
-  state: {
-    axiosConfig: { 
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    },
-    axiosConfigWithToken: { 
-      headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
-    }
-  },
-
   getters: {
-    axiosConfig: s => s.axiosConfig,
-    axiosConfigWithToken: s => s.axiosConfigWithToken,
+    // Обычный конфиг для аксиоса
+    axiosConfig() { 
+      return { 
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      }
+    },
+    
+    // Конфиг с токеном авторизации
+    axiosConfigWithToken() {
+      const token = `Bearer ${localStorage.getItem('accessToken')}`;
+      return { 
+        headers: { Authorization: token },
+      }
+    },
   },
 
   mutations: {

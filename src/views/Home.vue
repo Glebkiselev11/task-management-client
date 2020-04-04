@@ -27,14 +27,18 @@
 </template>
 
 <script>
-import Task from '@/components/Task';
 import { mapGetters, mapActions } from 'vuex';
+import Task from '@/components/Task';
+import erorStatusHandlerMixin from '@/mixins/errorStatusHandler.mixin.js';
 
 export default {
   name: 'Home',
   components: {
     Task,
   },
+
+  mixins: [erorStatusHandlerMixin], // В нем метод для обработки статусов ошибки
+
   data: () => ({
     params: {
       // Поиск по задачам
@@ -50,9 +54,8 @@ export default {
     try {
       await this.getTasks(this.params);
     } catch (error) {
-      // Если токен не действителен, или не найден, то редиректим на авторизацию
-      if (error.statusCode === 401) {
-        this.$router.push('login');
+      if (error.statusCode) {
+        this.errorStatusHandler(error.statusCode);
       }
     }
   },
