@@ -11,6 +11,16 @@
         <input type="text" v-model="params.search">
         <button type="submit">Search</button>
       </form>
+
+      <select 
+        v-model="params.status" 
+        @input="searchFilter()"
+      > 
+        <option :value="null">No filter status</option>
+        <option value="OPEN">Open</option>
+        <option value="DONE">Done</option>
+        <option value="IN_PROGRESS">In progress</option>
+      </select>
     </div>
 
     <h2 v-if="!tasks.length">Nothing found</h2>
@@ -18,8 +28,8 @@
     <!-- Елемент таски -->
     <Task 
       v-else
-      v-for="(task, index) of tasks"
-      :key="index"
+      v-for="task of tasks"
+      :key="task.id"
       :id="task.id"
       :title="task.title"
       :description="task.description"
@@ -50,6 +60,7 @@ export default {
     params: {
       // Поиск по задачам
       search: null,
+      status: null,
     },
   }),
 
@@ -91,5 +102,7 @@ export default {
 
   .tools-bar {
     padding: 5px;
+    display: flex;
+    justify-content: space-between;
   }
 </style>
